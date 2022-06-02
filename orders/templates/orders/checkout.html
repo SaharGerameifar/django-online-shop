@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} | تکمیل خرید و پرداخت {% endblock %}
+
+{% block content %}
+
+<div class="row mb-5">
+    <div class="col-1 col-md-2"></div>
+    <div class="col-10 col-md-8">
+        <section  class="pt-0">
+            <div class="container checkout_action">
+
+                <form action="." class="mt-3 mr-3" method="post" novalidate>
+                    {% csrf_token %}
+                    <table class="form-checkout">
+                            <tr>
+                                <td> <label for="#address" class="form-control-lable ml-3"> آدرس</label></td>
+                                <td>
+                                    {{ form.address }}
+                                    {% for error in form.address.errors %}
+                                        <p style="color: red;">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> <label for="#postcode" class="form-control-lable ml-3"> كد پستي</label></td>
+                                <td>
+                                    {{ form.post_code }}
+                                    {% for error in form.post_code.errors %}
+                                        <p style="color: red;">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <div class="payment my-5 text-center" >
+                                        <button type="submit" class="btn btn-info"> ثبت اطلاعات <i class="fa fa-long-arrow-left pr-2"></i> </button>
+                                    </div>
+                                </td>
+                            </tr>
+                    </table>
+                </form>
+                <hr>
+                <form action="{% url 'orders:apply_coupon' order.random_order_id %}" class="mt-3 mr-3" method="post" novalidate>
+                    {% csrf_token %}
+                    <div>
+                         <label for="" class="form-control-lable ml-3"> کد تخفیف</label>
+                        
+                            {{ form_coupon.code }}
+                            {% for error in form_coupon.code.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                            {% endfor %}
+                        
+                    </div>
+                    <div class="payment my-5 text-center" >
+                        <button type="submit" class="btn btn-info"> اعمال کد تخفیف</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <section id="cart_items" class="pb-0 mt-5">
+            <div class="container productcontainer">
+                <h3 class="py-3 title-table">سفارش شما</h3>
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td ></td>
+                                <td class="description">محصول</td>
+                                <td class="total">مجمـوع</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% with items=order.items.all %}
+                                {% for item in items %}
+                                <tr>
+                                    <td class="cart_item_number">{{ forloop.counter }}</td>
+                                    <td class="cart_description">
+                                        <p class="text-center">{{ item.product.name }}</p>
+                                    </td>
+                                    <td class="cart_total">
+                                        <p class="text-center cart_total_price">{{ item.get_cost|intcomma:False}} ریال</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endwith %}
+                        </tbody>
+                        <tfoot>
+                            
+                            <tr>
+                                <td colspan="2" class="cart_description">
+                                    <p class="text-center"> هزينه ارسال </p>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="text-center cart_total_price">رايگان</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="cart_description">
+                                    <p  class="text-center">مجموع سفارش </p>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="text-center cart_total_price">{{ order.get_total_price|intcomma:False}} ریال</p>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
+       
+
+    </div>
+    <div class="col-1 col-md-2"></div>
+</div>
+
+{% endblock %}

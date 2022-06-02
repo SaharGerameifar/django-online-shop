@@ -1,0 +1,10 @@
+{% extends "star_ratings/widget_base.html" %}
+{% block rating_detail %}
+<div>
+    {% if not user.is_authenticated %}
+        <small>
+            برای امتیاز دادن به این محصول باید در سایت وارد شده باشید.
+        </small>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} | کالاهای ذخیره شده شما {% endblock %}
+
+{% block content %}
+<div class="p-3 mb-3">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="align-items-center mx-auto">
+                <div class="row card-group">
+                    {% for save in saves %}
+                        <div class="col-6 col-md-3 mb-3">
+                            <a href="{{ save.product.get_absolute_url }}">
+                                <div class="card" >
+                                    <img src="{{ save.product.image.url }}" alt="" class="img-fluid card-img-top" />
+                                    <div class="card-body">
+                                        <h3 class="card-title"> {{ save.product.name|truncatewords:7 }}</h3>
+                                        <div class="price-container">
+                                            {% if save.product.has_discount %}
+                                                <del>{{ save.product.price|intcomma:False }}</del>
+                                                <span class="discount badge-danger">{{ save.product.get_superprice_percent }}٪</span>
+                                                <div style="height: 5px"></div>
+                                                <span class="now-price">{{ save.product.super_price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                            {% else %}
+                                                <div style="height: 5px"></div>
+                                                <span class="now-price">{{ save.product.price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                            {% endif %}    
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p class="alert alert-info">
+                            فعلا هیچ کالایی را در لیست ذخیره شده ها قرار نداده اید.
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+{% endblock %}

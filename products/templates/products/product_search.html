@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} |  نتایج برای : {{ search }} {% endblock %}
+
+{% block content %}
+<div class="p-3 mb-3">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="align-items-center mx-auto">
+                <div class="row card-group">
+                    {% for product in products %}
+                        <div class="col-6 col-md-3 mb-3">
+                            <a href="{{ product.get_absolute_url }}">
+                                <div class="card" >
+                                    <img src="{{ product.image.url }}" alt="" class="img-fluid card-img-top" />
+                                    <div class="card-body">
+                                        <h3 class="card-title"> {{ product.name|truncatewords:7 }}</h3>
+                                        <div class="price-container">
+                                            {% if product.has_discount %}
+                                                <del>{{ product.price|intcomma:False }}</del>
+                                                <span class="discount badge-danger">{{ product.get_superprice_percent }}٪</span>
+                                                <div style="height: 5px"></div>
+                                                <span class="now-price">{{ product.super_price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                            {% else %}
+                                                <div style="height: 5px"></div>
+                                                <span class="now-price">{{ product.price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                            {% endif %}    
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p class="alert alert-info">
+                           متاسفانه کالایی با این عنوان یافت نشد.
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+    <div class="clearfix"></div>
+    <ul class="pagination mt-5">
+        {% if page_obj.has_previous %}
+             <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+        {% endif %}
+        {% for page in paginator.page_range %}
+            {% if page == page_obj.number %}
+                <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
+            {% else %}
+                <li><a href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+             <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+        {% endif %}
+
+    </ul>
+</div>
+{% endblock %}

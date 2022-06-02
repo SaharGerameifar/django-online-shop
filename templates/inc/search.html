@@ -1,0 +1,6 @@
+<form action="{% url 'products:product_search' %}" method="get" novalidate>
+    <input type="text" placeholder="جستجو در سانتك ..." class="form-control d-inline w-75" value="{{ request.GET.search }}" name="search">
+    <button type="submit" class="btn">
+        <i class="fa fa-search"></i>
+    </button>
+</form>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} | عضویت {% endblock %}
+
+{% block content %}
+
+         <div class="row mb-5">
+            <div class="col-md-2 col-1"></div>
+            <div class="col-md-8 col-10">
+                <form method="POST" class="form-login" novalidate>
+                    {% csrf_token %}
+                    <b class="register-title">کد فعال سازی</b>
+                    <div class="wrap-input100 validate-input form-group register" data-validate = "">
+                        {{ form.code }}
+                        <span class="focus-input100" data-placeholder="کد فعال سازی خود را وارد كنيد"></span>
+                        {% for error in form.code.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                      ارسال
+                    </button>
+                  
+                </form> 
+            </div>
+            <div class="col-md-2 col-1"></div>
+        </div>
+   
+{% endblock %}

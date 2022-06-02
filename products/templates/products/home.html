@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} | صفحه اصلی {% endblock %}
+
+{% block content %}
+<!-- start banner -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div id="CarouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for item in sliders %}
+                <li data-target="#CarouselExampleSlidesOnly" data-slide-to="item.id"
+                    class=" rounded-circle {{ forloop.first|yesno:'active,' }}"></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for slider in sliders %}
+                <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                    <a href="{{ slider.link }}" target="_blank">
+                        <img src="{{ slider.image.url }}" class="w-100 img-fluid" alt="{{ slider.name }}" />
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#CarouselExampleSlidesOnly" role="button" data-slide="next">
+                <span>
+                    <i class="fa fa-arrow-circle-o-left " aria-hidden="true"></i>
+                </span>
+
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#CarouselExampleSlidesOnly" role="button" data-slide="prev">
+                <span>
+                    <i class="fa fa-arrow-circle-o-right " aria-hidden="true"></i>
+                </span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- end banner  -->
+
+<!-- start high rank product section -->
+<div class="section-high-rank-product p-3 mb-3">
+    <div class="row">
+        <div class="col-2">
+            <a href="#" class="btn btn-outline-light pl-1">پر امتیازترین کالاها<i class="fa fa-angle-left pr-2"></i></a>
+        </div>
+        <div class="col-10">
+            <div id="high-rank-item-carousel" class="carousel" data-ride="carousel">
+                <div class="carousel-inner align-items-center mx-auto">
+                    {% for top_rate_product_group in top_rate_products %}
+                    <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                        <div class="row card-group">
+                            {% for top_rate_product in top_rate_product_group %}
+                            <div class="col-6 col-md-3 mb-3">
+                                <a href="{{ top_rate_product.get_absolute_url }}">
+                                    <div class="card" >
+                                        <img src="{{ top_rate_product.image.url }}" alt=""
+                                            class="img-fluid card-img-top" />
+                                        <div class="card-body">
+                                            <h3 class="card-title"> {{ top_rate_product.name|truncatewords:7 }}</h3>
+                                            <div class="price-container">
+                                                {% if top_rate_product.has_discount %}
+                                                <del>{{ top_rate_product.price|intcomma:False }}</del>
+                                                <span
+                                                    class="discount badge-danger">{{ top_rate_product.get_superprice_percent }}٪</span>
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ top_rate_product.super_price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% else %}
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ top_rate_product.price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="left high-rank-item-control" href="#high-rank-item-carousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="right high-rank-item-control" href="#high-rank-item-carousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end high rank product section  -->
+<!-- start most visited product section -->
+<div class="section-most-visited-product p-3 mb-3">
+    <div class="row">
+        <div class="col-2">
+            <a href="#" class="btn btn-outline-light pl-1">پر بازدیدترین کالاها <i class="fa fa-angle-left pr-2"></i></a>
+        </div>
+        <div class="col-10">
+            <div id="visited-item-carousel" class="carousel" data-ride="carousel">
+                <div class="carousel-inner align-items-center mx-auto">
+                    {% for popular_product_group in popular_products %}
+                    <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                        <div class="row card-group">
+                            {% for popular_product in popular_product_group %}
+                            <div class="col-6 col-md-3 mb-3">
+                                <a href="{{ popular_product.get_absolute_url }}">
+                                    <div class="card">
+                                        <img src="{{ popular_product.image.url }}" alt=""
+                                            class="img-fluid card-img-top" />
+                                        <div class="card-body">
+                                            <h3 class="card-title"> {{ popular_product.name|truncatewords:7 }}</h3>
+                                            <div class="price-container">
+                                                {% if popular_product.has_discount %}
+                                                <del>{{ popular_product.price|intcomma:False }}</del>
+                                                <span
+                                                    class="discount badge-danger">{{ popular_product.get_superprice_percent }}٪</span>
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ popular_product.super_price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% else %}
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ popular_product.price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="left visited-item-control" href="#visited-item-carousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="right visited-item-control" href="#visited-item-carousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end most visited product section  -->
+<!-- start newest product section -->
+<div class="section-newest-product p-3 mb-3">
+    <div class="row">
+        <div class="col-2">
+            <a href="#" class="btn btn-outline-light pl-1"> جدیدترین کالاها <i class="fa fa-angle-left pr-2"></i></a>
+        </div>
+        <div class="col-10">
+            <div id="newest-item-carousel" class="carousel" data-ride="carousel">
+                <div class="carousel-inner align-items-center mx-auto">
+                    {% for newest_product_group in newest_products %}
+                    <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                        <div class="row card-group">
+                            {% for newest_product in newest_product_group %}
+                            <div class="col-6 col-md-3 mb-3">
+                                <a href="{{ newest_product.get_absolute_url }}">
+                                    <div class="card">
+                                        <img src="{{ newest_product.image.url }}" alt="" class="img-fluid card-img-top" />
+                                        <div class="card-body">
+                                            <h3 class="card-title"> {{ newest_product.name|truncatewords:7 }}</h3>
+                                            <div class="price-container">
+                                                {% if newest_product.has_discount %}
+                                                <del>{{ newest_product.price|intcomma:False }}</del>
+                                                <span
+                                                    class="discount badge-danger">{{ newest_product.get_superprice_percent }}٪</span>
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ newest_product.super_price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% else %}
+                                                <div style="height: 5px"></div>
+                                                <span
+                                                    class="now-price">{{ newest_product.price|intcomma:False }}</span>
+                                                <span class="price-unit">ریال</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <a class="left newest-item-control" href="#newest-item-carousel" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="right newest-item-control" href="#newest-item-carousel" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end newest product section  -->
+<div class="row p-3 mb-3">
+    <span class="d-block mx-auto go-to-up">
+        <a href="#main-section">
+            <i class="fa fa-angle-up"></i>
+            برگشت به بالا
+        </a>
+    </span>
+
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> فاكتور شما </title>
+
+</head>
+
+<body>
+
+    <h3>سفارش شما</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <td></td>
+                <td>محصول</td>
+                <td ">مجمـوع</td>
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for item in order.items.all %}
+                <tr>
+                    <td >{{ forloop.counter }}</td>
+                    <td >
+                        <p>{{ item.product.name }}</p>
+                    </td>
+                    <td >
+                        <p >{{ item.get_cost}} ریال
+                        </p>
+                    </td>
+                </tr>
+            {% endfor %}
+           
+        </tbody>
+        <tfoot>
+
+            <tr>
+                <td colspan=" 2">
+                    <p> هزينه ارسال </p>
+                </td>
+                <td>
+                    <p>رايگان</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" c>
+                    <p>مجموع سفارش </p>
+                </td>
+                <td>
+                    <p>
+                        {{ order.get_total_price}} ریال</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>شماره سفارش </p>
+                </td>
+                <td>
+                    <p>{{ order.random_order_id }} </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>شماره تراکنش بانک </p>
+                </td>
+                <td>
+                    <p>{{ order.refId }} </p>
+                </td>
+            </tr>
+            </tfoot>
+    </table>
+
+
+    <div>
+        <table>
+            <tr>
+                <td> <label> آدرس</label></td>
+                <td>
+                    {{ order.address }}
+
+                </td>
+            </tr>
+            <tr>
+                <td> <label> كد پستي</label></td>
+                <td>
+                    {{ order.post_code }}
+
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} | پروفایل حساب شما {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-12 col-md-10">
+
+        <table class="table table-responsive table-striped profiletable">
+            <tbody>
+                <tr>
+                    <td>نام و نام خانوادگی </td>
+                    <td>{{ request.user.full_name }}</td>
+                </tr>
+                <tr>
+                    <td>شماره موبایل </td>
+                    <td>{{ request.user.phone_number }}</td>
+                </tr>
+                <tr>
+                    <td>ایمیل </td>
+                    <td>{{ request.user.email }}</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+{% endblock %}

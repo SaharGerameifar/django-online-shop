@@ -1,0 +1,91 @@
+{% load static %}
+
+<header class="fixed-top py-3 bg-light">
+    <!-- start first header  -->
+    <div class="row">
+        <div class="col-7 col-md-9 d-flex">
+            <a href="{% url 'products:home' %}" class="navbar-brand">
+                <img src="{% static 'image/logo.jpg' %}" alt="" class="img-fluid navbar-brand-img" width="100px" height="17px">
+            </a>
+            <div class="pr-2 w-100">
+                {% include 'inc/search.html' %}
+                
+            </div>
+        </div>
+        <div class="col-5 col-md-3">
+            {% if request.user.is_authenticated %}
+                
+                <div class="btn-group " role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-outline-secondary">حساب کاربری</button>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if request.user.is_admin %}
+                                <a class="dropdown-item" href="{% url 'awsbuckets:list_bucket' %}">فضای ابر آروان</a>
+                            {% endif %}
+                            <a class="dropdown-item" href="{% url 'accounts:profile' %}"> اطلاعات من</a>
+                            <a class="dropdown-item" href="{% url 'orders:order_paid' %}"> سفارشات من</a>
+                            <a class="dropdown-item" href="{% url 'products:products_like' %}"> لیست علاقه مندی ها </a>
+                            <a class="dropdown-item" href="{% url 'products:products_save' %}"> لیست ذخیره شده ها</a>
+                            <a class="dropdown-item" href="{% url 'accounts:user_logout' %}"> خروج</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <button type="button" class="btn btn-outline-secondary">
+                    <span>
+                        <i class="fa fa-user-o"></i>
+                    </span>
+                    <span> <a href="{% url 'accounts:user_login' %}">ورود / عضويت</a> </span>
+                </button>
+            {% endif %}
+            <button type="button" class="btn">
+                
+                    <a href="{% url 'orders:cart' %}">
+                        <small class="badge-danger mx-1">{{ cart|length }}</small><i class="fa fa-shopping-basket"></i>
+                    </a>
+                
+            </button>
+        </div>
+    </div>
+    <!-- end first header -->
+
+    <!-- start seconde header  -->
+    <div class="seconde-header">
+        <ul class="d-flex pr-0">
+            <li class="d-inline col-6 col-md-5">
+                <nav class="navbar">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-icon"><i class="fa fa-bars pl-2"></i>دسته بندي كالاها
+                        </span>
+                    </button>
+                    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                        <ul class="navbar-nav">
+                            {% for category in categories %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="#" id="navbarDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-shopping-bag pl-1"></i> {{ category.name }}<i
+                                            class="fa fa-angle-left pr-2"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right mr-md-5"
+                                        aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ category.get_absolute_url }}">همه كالاهاي دسته {{ category.name }}</a>
+                                        {% for sub in category.subcategory.all %}
+                                            <a class="dropdown-item" href="{{ sub.get_absolute_url }}">{{ sub.name }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </nav>
+            </li>
+            
+        </ul>
+
+    </div>
+    <!-- end seconde header -->
+</header>

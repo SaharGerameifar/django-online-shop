@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %} | تماس با ما {% endblock %}
+{% block content %}
+ 
+<div class="row mb-5">
+  <div class="col-md-2 col-1"></div>
+  <div class="col-md-8 col-10">
+      <form method="POST" class="form-login" novalidate>
+         {% csrf_token %}
+          <b class="register-title">تماس با سانتک</b>
+          <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+            {{ form.full_name }}
+            <span class="focus-input100" data-placeholder="نام و نام خانوادگي خود را وارد كنيد"></span>
+            {% for error in form.full_name.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+            {{ form.email }}
+            <span class="focus-input100" data-placeholder="ايميل خود را وارد كنيد"></span>
+            {% for error in form.email.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+            {{ form.subject }}
+            <span class="focus-input100" data-placeholder="عنوان پیام خود را وارد کنید"></span>
+            {% for error in form.subject.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+            {{ form.body }}
+            <span class="focus-input100" data-placeholder="متن پيام خود را وارد كنيد"></span>
+            {% for error in form.body.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div>
+          {{ form.captcha }}
+        </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            ثبت و ارسال
+          </button>
+        
+      </form>
+  </div>
+  <div class="col-md-2 col-1"></div>
+</div>
+
+{% endblock %}

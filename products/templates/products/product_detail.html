@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load ratings %}
+{% block title %} | {{ product.name }} {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-12 col-md-10">
+        <div class="row info-product-section">
+            <div class="col-12 col-md-6 pr-5 pt-3">
+                <h2> {{ product.name }}</h2>
+                <hr>
+                <p><b>موجـودی :</b> در انبـار موجود می باشد</p>
+                {% if product.has_discount %}
+                <p>
+                <div style="height: 5px"></div>
+                <b>قيمت : {{ product.super_price|intcomma:False }} ریال </b>
+                <del>{{ product.price|intcomma:False }}</del>
+                <span class="price-unit">ریال</span>
+                <span class="discount badge-danger">{{ product.get_superprice_percent }}٪</span>
+                </p>
+                {% else %}
+                <div style="height: 5px"></div>
+                <p> <b>قيمت : </b> {{ product.price|intcomma:False }} ریال</p>
+
+                {% endif %}
+
+                <form action="{% url 'orders:cart_add' product.id %}" method="post" novalidate>
+                    {% csrf_token %}
+                    <label><b>تعداد :</b></label>
+                    {{ form_add.quantity }}
+                    {% for error in form_add.quantity.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                    <button type="submit" class="d-block btn btn-secondary mt-3">
+                        <i class="fa fa-shopping-cart"></i>
+                        افـزودن به سبـد خریـد
+                    </button>
+                </form>
+                <hr>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'products:product_like' product.slug %}">
+                    <i class="{% if can_like %} fa fa-heart pl-2 {% else %} fa fa-heart-o pl-2 {% endif %}"> </i>
+                </a>
+                <a href="{% url 'products:product_save' product.slug %}">
+                    <i class="{% if can_save %} fa fa-bookmark {% else %} fa fa-bookmark-o {% endif %}"> </i>
+                </a>
+                
+                {% endif %}
+                <br>
+                {% ratings product %}
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="row mt-5">
+                    <div class="col-12">
+                        {% if product.image_gallery.all %}
+                        <div id="CarouselExampleSlidesOnly" class="carousel container-product-carousel "
+                            data-ride="carousel">
+                            <ol class="carousel-indicators carousel-indicators-product ">
+                                {% for gallery in product.image_gallery.all %}
+                                <li data-target="#CarouselExampleSlidesOnly" data-slide-to="{{ gallery.id }}"
+                                    class="{{ forloop.first|yesno:'active,' }} rounded-circle"></li>
+                                {% endfor %}
+                            </ol>
+                            <div class="carousel-inner">
+                                {% for gallery in product.image_gallery.all %}
+                                <div class="{{ forloop.first|yesno:'active,' }} carousel-item">
+                                    <a href="#">
+                                        <img src="{{ gallery.image.url }}" class="w-100 img-fluid"
+                                            alt="{{ gallery.name }}" />
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#CarouselExampleSlidesOnly" role="button"
+                                data-slide="next">
+                                <span>
+                                    <i class="fa fa-arrow-circle-o-left " aria-hidden="true"></i>
+                                </span>
+
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#CarouselExampleSlidesOnly" role="button"
+                                data-slide="prev">
+                                <span>
+                                    <i class="fa fa-arrow-circle-o-right " aria-hidden="true"></i>
+                                </span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        {% else %}
+                        <img src="{{ product.image.url }}" class="w-100 img-fluid" alt="{{ product.name }}" />
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="product-more-info">
+            <ul class="nav nav-tabs ">
+                <li class="nav-item ">
+                    <a class="nav-link active" data-toggle="tab" href="#detaile">مشخصات محصول</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tags">برچسب ها</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#comment"> دیدگاه ها <span
+                            class="badge badge-pill badge-secondary">{{ product.comments_count }}</span></a>
+                </li>
+
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade show active" id="detaile">
+                    <p> {{ product.description|safe }} </p>
+                </div>
+                <div class="tab-pane fade" id="tags">
+                    {% if product.tag.all %}
+                    {% for tag in product.tag.all %}
+                    <a href="#"> <span class="badge badge-pill badge-secondary">{{ tag.name }}</span> </a>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="comment">
+                    {% if request.user.is_authenticated %}
+                    <br>
+                    <form method="POST" novalidate id="createcomment">
+
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.description }}
+                            {% for error in form.description.errors %}
+                            <p class="alert alert-danger">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <input type="submit" value="ارسال دیدگاه" class="btn btn-primary btn-block">
+                    </form>
+                    <br>
+                    {% else %}
+                    <p class="alert alert-danger"> ابتدا در سایت وارد شوید ، سپس دیدگاهی بگذارید.</p>
+                    {% endif %}
+                    <a id="btncreatecomment">ایجاد یک دیدگاه جدید</a>
+                    <hr>
+                    <div>
+                        {% for comment in comments %}
+                        <strong class="card-text text-dark mb-4">{{ comment.user.full_name }}</strong>
+                        <small class="d-block py-2 comment-time">{{ comment.created|timesince }}</small>
+                        <p class="card-text pr-1 comment-body">{{ comment.description|safe }}</p>
+                        {% if request.user.is_authenticated %}
+                        <a class="btnreplycomment">پاسخ</a>
+                        <form action="{% url 'products:create_reply_comment' comment.id product.slug %}" method="post"
+                            novalidate class="replycomment">
+
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form_reply.description }}
+                                {% for error in form_reply.description.errors %}
+                                <p class="alert alert-danger">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% if form_reply.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form_reply.non_field_errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <input type="submit" value="ارسال پاسخ" class="btn btn-primary btn-block">
+                        </form>
+                        {% endif %}
+                        {% with replies=comment.get_active_replies_comment %}
+                        <div class="mr-5">
+                            {% for reply in replies %}
+                            <hr>
+                            <strong
+                                class="card-text replycommentusername text-dark mb-4">{{ reply.user.full_name }}</strong>
+                            <small class="d-block py-2 comment-time">{{ reply.created|timesince }}</small>
+                            <p class="card-text pr-2 comment-body">{{ reply.description|safe }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endwith %}
+                        <hr>
+                        {% empty %}
+                        <small class="d-block py-2">فعلا هیچ دیدگاهی وجود ندارد.</small>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row mt-5">
+
+    <h3 class="recommend-text">محصولات پيشنهادي</h3>
+    <div class="col-12">
+        <div id="recommend-item-carousel" class="carousel" data-ride="carousel">
+            <div class="carousel-inner align-items-center mx-auto">
+                {% for related_product_group in related_products %}
+                <div class="{{ forloop.first|yesno:'active,' }} carousel-item">
+                    <div class="row card-group">
+                        {% for product_recommend in related_product_group %}
+                        <div class="col-6 col-md-3 mb-3">
+                            <a href="{{ product_recommend.get_absolute_url }}">
+                                <div class="card" >
+                                    <img src="{{ product_recommend.image.url }}" alt=""
+                                        class="img-fluid card-img-top" />
+                                    <div class="card-body">
+                                        <h3 class="card-title"> {{ product_recommend.name|truncatewords:7 }}</h3>
+                                        <div class="price-container">
+                                            {% if product_recommend.has_discount %}
+                                            <del>{{ product_recommend.price|intcomma:False }}</del>
+                                            <span
+                                                class="discount badge-danger">{{ product_recommend.get_superprice_percent }}٪</span>
+                                            <div style="height: 5px"></div>
+                                            <span
+                                                class="now-price">{{ product_recommend.super_price|intcomma:False }}</span>
+                                            <span class="price-unit">ریال</span>
+                                            {% else %}
+                                            <div style="height: 5px"></div>
+                                            <span class="now-price">{{ product_recommend.price|intcomma:False }}</span>
+                                            <span class="price-unit">ریال</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="left recommend-item-control" href="#recommend-item-carousel" data-slide="prev">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="right recommend-item-control" href="#recommend-item-carousel" data-slide="next">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

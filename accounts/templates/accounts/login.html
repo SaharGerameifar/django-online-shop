@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %} | ورود {% endblock %}
+
+{% block content %}
+ 
+<div class="row mb-5">
+  <div class="col-md-2 col-1"></div>
+  <div class="col-md-8 col-10">
+      <form method="POST" class="form-login" novalidate>
+         {% csrf_token %}
+          <b class="register-title">ورود به سانتك</b>
+          <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+            {{ form.phone_number }}
+            <span class="focus-input100" data-placeholder="شماره موبایل  و یا ایمیل خود را وارد كنيد"></span>
+            {% for error in form.phone_number.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="wrap-input100 validate-input form-group register" data-validate="Enter password">
+            <span class="btn-show-pass">
+              <i class="fa fa-eye"></i>
+            </span>
+            {{ form.password }}
+            <span class="focus-input100" data-placeholder="گذر واژه خود را وارد كنيد"></span>
+            {% for error in form.password.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="mx-3 mb-3">
+            <a href="{% url 'accounts:user_register' %}" >حساب کاربری ندارید؟ ثبت نام کنید.</a>
+          </div>
+          <div class="mx-3 mb-3">
+            <a href="{% url 'accounts:password_reset' %}">
+              گذر واژه خود را فراموش کرده اید؟(اینجا کلیک کنید.)
+            </a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            ورود
+          </button>
+        
+      </form>
+  </div>
+  <div class="col-md-2 col-1"></div>
+</div>
+
+{% endblock %}

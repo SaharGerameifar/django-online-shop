@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} | سفارش شما {% endblock %}
+
+{% block content %}
+
+<div class="row mb-5">
+    <div class="col-1 col-md-2"></div>
+    <div class="col-10 col-md-8">
+        <div class="title_container">
+            <h2 class=" title-table">از خريد شما متشكريم</h2>
+        </div>
+        
+        <section id="cart_items" class="pb-0 pt-4" style="min-height: 0;">
+            <div class="container productcontainer">
+                <h3 class="py-3 title-table"> ليست سفارش شما</h3>
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td></td>
+                                <td class="description">محصول</td>
+                                <td class="description">تعداد</td>
+                                <td class="total">قيمت</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order_items %}
+                            <tr>
+                                <td class="cart_item_number">{{ forloop.counter }}</td>
+                                <td class="cart_description">
+                                    <p class="text-center">{{ item.product.name }}</p>
+                                </td>
+                                <td class="cart_description">
+                                    <p class="text-center">{{ item.quantity }}</p>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="text-center cart_total_price">{{ item.get_cost|intcomma:False }} ریال</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="4">
+                                    <h4 class="title-table"> 
+                                        شماره سفارش شما {{ order.random_order_id }}
+                                    </h4>
+                                    <h4 class="title-table">
+                                        شماره تراکنش بانک {{ refId }}
+                                    </h4>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-1 col-md-2"></div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} | سبد خرید {% endblock %}
+
+{% block content %}
+
+<div class="row mb-5">
+    <div class="col-12">
+       
+        <section id="cart_items" class="pb-0">
+           
+                <h3 class="py-3 title-table"> سبد خريد</h3>
+            {% if cart %}
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td></td>
+                                <td class="image" ></td>
+                                <td class="description">عنوان</td>
+                                <td class="price">قیمت</td>
+                                <td class="quantity">تعـداد</td>
+                                <td class="total">مجمـوع</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                                <tr>
+                                    <td class="cart_item_number">{{ forloop.counter }}</td>
+                                    <td class="cart_product">
+                                        <a href="{{ item.product.get_absolute_url }}"><img src="{{ item.product.image.url }}" class="img-fluid" alt=""></a>
+                                    </td>
+                                    <td class="cart_description">
+                                        <h4><a href="{{ item.product.get_absolute_url }}">{{ item.product }}</a></h4>
+                                        
+                                    </td>
+                                    <td class="cart_price">
+                                        <p>{{ item.price|intcomma:False }} ریال</p>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <div class="cart_quantity_button">
+                                            <input class="cart_quantity_input" type="text" name="quantity" value="{{ item.quantity }}"
+                                                autocomplete="off" size="1">
+                                        </div> 
+                                        
+                                    </td>
+                                    <td class="cart_total">
+                                        <p class="cart_total_price">{{ item.total_price|intcomma:False }} ریال</p>
+                                    </td>
+                                    <td class="cart_delete">
+                                        <a class="cart_quantity_delete" href="{% url 'orders:cart_remove' item.product.id %}"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                           
+                            {% endfor %}    
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="alert alert-info"> سبد خرید شما خالی است.   </p>
+            {% endif %}
+        </section>
+        {% if cart %}
+            <section id="do_action" class="pt-0">
+                <div class="container do_action">
+                    
+                    <form action="#" class="mt-3 mr-3">
+                        <table>
+                          
+                            <tr>
+                                <td><label for="" class="form-control-lable ml-3">هزينه ارسال</label></td>
+                                <td> <input type="text" readonly class="form-control form-control-plaintext " value=" رايگان"></td>
+                            </tr>
+                            <tr>
+                                <td> <label for="" class="form-control-lable ml-3"> مجموع سبد خريد</label></td>
+                                <td><input type="text" readonly class="form-control form-control-plaintext " value=" {{ cart.get_total_price|intcomma:False}} ریال"></td>
+                            </tr>
+                        </table>
+                        <div class="payment my-5">
+                            <a  href="{% url 'orders:order_create' %}"> تكميل خريد  <i class="fa fa-long-arrow-left pr-2"></i></a>
+                        </div>
+                                            
+                    </form>
+                </div>
+            </section>
+        {% endif %}    
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %} | لیست سفارشات پرداخت شده شما {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-12 col-md-10">
+
+        {% if orders %}
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="order-header">
+                        <td></td>
+                        <td class="description">شماره سفارش</td>
+                        <td class="description">تاریخ پرداخت</td>
+                        <td class="total">قيمت</td>
+                        <td>مشاهده جزئیات</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="cart_item_number">{{ forloop.counter }}</td>
+
+                        <td class="cart_description">
+                            <p class="text-center">{{ order.random_order_id }}</p>
+                        </td>
+                        <td class="cart_description">
+                            <p class="text-center">{{ order.jupdated }}</p>
+                        </td>
+                        <td class="cart_total">
+                            <p class="text-center cart_total_price">{{ order.get_total_price|intcomma:False }} ریال</p>
+                        </td>
+                        <td class="cart_total ">
+                            <a href="{% url 'orders:order_paid_detail' order.random_order_id %}"><i class="fa fa-shopping-basket pr-5"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="alert alert-info"> شما هیچ سفارش پرداخت شده ای ندارید. </p>
+        {% endif %}
+
+
+    </div>
+    <div class="col-md-1"></div>
+
+    {% endblock %}

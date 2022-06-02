@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %} | عضویت {% endblock %}
+
+{% block content %}
+ 
+        <div class="row mb-5">
+            <div class="col-md-2 col-1"></div>
+            <div class="col-md-8 col-10">
+                <form method="POST" class="form-login" novalidate>
+                  {% csrf_token %}
+                    <b class="register-title">ثبت نام در سانتك</b>
+                    <div class="wrap-input100 validate-input form-group register" data-validate = "">
+                        {{ form.phone_number }}
+                        <span class="focus-input100" data-placeholder="شماره موبایل خود را وارد كنيد"></span>
+                        {% for error in form.phone_number.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="wrap-input100 validate-input form-group register" data-validate = "">
+                      {{ form.full_name }}
+                      <span class="focus-input100" data-placeholder="نام و نام خانوادگی خود را وارد كنيد"></span>
+                      {% for error in form.full_name.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                    <div class="wrap-input100 validate-input form-group register" data-validate = "Valid email is: a@b.c">
+                        {{ form.email }}
+                      <span class="focus-input100" data-placeholder="ايميل خود را وارد كنيد"></span>
+                      {% for error in form.email.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+    
+                    <div class="wrap-input100 validate-input form-group register" data-validate="Enter password">
+                      <span class="btn-show-pass">
+                        <i class="fa fa-eye"></i>
+                      </span>
+                      {{ form.password1 }}
+                      <span class="focus-input100" data-placeholder="گذر واژه خود را وارد كنيد"></span>
+                      {% for error in form.password1.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                    <div class="wrap-input100 validate-input form-group register" data-validate="Enter password">
+                      <span class="btn-show-pass">
+                        <i class="fa fa-eye"></i>
+                      </span>
+                      {{ form.password2 }}
+                      <span class="focus-input100" data-placeholder="تكرار گذر واژه خود را وارد كنيد"></span>
+                      {% for error in form.password2.errors %}
+                                <p style="color: red;">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+    
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                      ثبت نام
+                    </button>
+                  
+                </form> 
+            </div>
+            <div class="col-md-2 col-1"></div>
+        </div>
+
+{% endblock %}

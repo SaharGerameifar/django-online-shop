@@ -1,0 +1,17 @@
+@font-face {
+    font-family: Sahel;
+    src: url('../font/Sahel.eot');
+    src: url('../font/Sahel.eot?#iefix') format('embedded-opentype'),
+            url('../font/Sahel.woff2') format('woff2'),
+            url('../font/Sahel.woff') format('woff'),
+            url('../font/Sahel.ttf') format('truetype');
+    font-weight: normal;
+    }
+body{
+    direction: rtl;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+    font-family: Sahel;
+    
+}

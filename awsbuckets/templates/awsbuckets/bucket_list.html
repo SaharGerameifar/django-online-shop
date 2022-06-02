@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %} | صندوقچه ابری {% endblock %}
+
+{% block content %}
+<section id="cart_items" class="pb-0 mt-5">
+    <div class="container productcontainer">
+        {% if objects %}
+            <h3 class="py-3 title-table">صندوقچه های ابر آروان </h3>
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr class="cart_menu">
+                        <th scope="col"></th>
+                        <th scope="col" class="description">نام</th>
+                        <th scope="col" class="description">اندازه</th>
+                        <th scope="col" class="description">دانلود </th>
+                        <th scope="col" class="description">حذف</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in objects %}
+                    <tr>
+                        <th scope="row"  class="cart_item_number">{{ forloop.counter }}</th>
+                        <td class="cart_description">{{ obj.Key }}</td>
+                        <td class="cart_description">{{ obj.Size|filesizeformat }}</td>
+                        <td class="cart_description"><a href="{% url 'awsbuckets:download_obj_bucket' obj.Key %}"> <i class="fa fa-download"></i></a></td>
+                        <td class="cart_description"><a href="{% url 'awsbuckets:delete_obj_bucket' obj.Key %}"><i class="fa fa-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div> 
+        {% else %} 
+            <p class="alert alert-info"> هیچ محتوایی در صندوقچه ابر آروان یافت نشد.  </p>
+        {% endif %}      
+    </div> 
+</section>           
+<br>
+<hr>
+<form action="{% url 'awsbuckets:list_bucket' %}" method="POST" novalidate class="form-login" enctype="multipart/form-data">
+    {% csrf_token %}
+    <b class="register-title">آپلود کنید.</b>
+    {{ form.image }}
+    <button type="submit" class="btn btn-primary btn-block">
+        آپلود
+      </button>
+</form>
+
+
+{% endblock %}
